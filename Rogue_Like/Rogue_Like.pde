@@ -3,13 +3,18 @@
 // Map
 int[][] currentMap;
 Map map;
-int gridScl = 10;
+int gridScl = 2;
 
 void setup() {
 
   size(1000, 800);
 
-  map = new CellularAutomata();
+  /*
+   CellularAutomataOne
+   CellularAutomataTwo(width/gridScl, height/gridScl)
+   DrunkardsWalk
+   */
+  map = new DrunkardsWalk();
 
   currentMap = map.generateMap(width/gridScl, height/gridScl);
 }

@@ -1,14 +1,11 @@
 using System;
 namespace HelloWorld
 {
-  class Hello 
+  class Goodbye 
   {
     static void Main() 
     {
-      Console.WriteLine("Hello World!");
-
-      Console.WriteLine("Press any key to exit.");
-      Console.ReadKey();
+      Console.WriteLine("Goodbye, World!");
     }
   }
 }

@@ -3,21 +3,54 @@
 // Map
 int[][] currentMap;
 Map map;
-int gridScl = 10;
+int mapScl;
+int gridScl;
+
+double timer;
+
+// Hero
+Hero hero;
+PVector startingPos;
+
+// Camera
+PVector camPos;
+float camSmoothing;
+
+// Input;
+boolean[] pressed = new boolean[256];
+char upKey, leftKey, downKey, rightKey, shootKey;
+
+// ArrayList of walls
+ArrayList<Wall> walls = new ArrayList<Wall>();
+
 
 void setup() {
+  size(1000, 800, FX2D);
 
-  size(1000, 800);
+  // Map
+  mapScl = 10;
+  gridScl = 10;
+  map = new Map();
+  currentMap = map.generateMap(width/mapScl, height/mapScl);
 
-  map = new CellularAutomata();
+  // Hero
+  startingPos = map.start.copy();
+  startingPos.mult(gridScl);
+  startingPos.sub(width/2, height/2);
+  hero = new Hero(startingPos);
 
-  currentMap = map.generateMap(width/gridScl, height/gridScl);
+  // Input Key Values
+  upKey = 'W';
+  leftKey = 'A';
+  downKey = 'S';
+  rightKey = 'D';
+  shootKey = ' ';
+
+  camPos = new PVector(hero.position.x, hero.position.y);
+  camSmoothing = 0.2;
 }
 
 void draw() {
-  displayMap();
-}
-
-void mouseReleased() {
-  currentMap = map.generateMap(width/gridScl, height/gridScl);
+  background(0);
+  play();
 }

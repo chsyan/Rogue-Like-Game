@@ -1,12 +1,28 @@
-void displayMap() {
+void play() {
+
+  updateCamera();
+  //pushMatrix();
+  //translate(-camPos.x, -camPos.y);
+  drawMap();
+
+  //popMatrix();
+
+  hero.update();
+}
+
+void initMap() {
   for (int i = 0; i < currentMap.length; i++)
-    for (int j = 0; j < currentMap[0].length; j++) {
-      noStroke();
-      int s = currentMap[i][j];
-      if (s == 0) fill(255);
-      else if (s == 1) fill(0);
-      else if (s == 2) fill(0, 0, 255);
-      else if (s == 3) fill(255, 0, 0);
-      rect(i*gridScl, j*gridScl, gridScl, gridScl);
-    }
+    for (int j = 0; j < currentMap[0].length; j++)
+      walls.add(new Wall(new PVector(i*gridScl, j*gridScl), gridScl, currentMap[i][j]));
+}
+
+void drawMap() {
+  for (Wall w : walls) {
+    w.display();
+  }
+}
+
+void updateCamera() {
+  camPos = new PVector(hero.position.x * gridScl, hero.position.y);
+  //camPos.lerp(new PVector(hero.position.x, hero.position.y), camSmoothing);
 }

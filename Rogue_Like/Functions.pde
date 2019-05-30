@@ -37,9 +37,22 @@ void play() {
 
 
 void displayMap() {
+  for (GameObject o : gameObjects)
+    if (o instanceof Wall) {
+      o.update();
+      o.display();
+    }
+
+
   for (int i = gameObjects.size()-1; i >= 0; i--) {
     GameObject obj = gameObjects.get(i);
-    obj.update();
-    obj.display();
+    if (!(obj instanceof Wall)) {
+      if (obj.isDead()) {
+        gameObjects.remove(i);
+      } else {
+        obj.update();
+        obj.display();
+      }
+    }
   }
 }

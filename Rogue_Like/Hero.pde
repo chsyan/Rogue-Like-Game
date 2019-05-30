@@ -13,6 +13,8 @@ class Hero extends GameObject {
 
   PVector camOff;
 
+  Gun gun;
+
   Hero(PVector start) {
     sightInt = new PVector();
 
@@ -30,6 +32,8 @@ class Hero extends GameObject {
     hp = 100;
 
     viewRadius = 5 * mapScl;
+
+    gun = new Gun(30);
   }
 
   void display() {
@@ -47,6 +51,7 @@ class Hero extends GameObject {
     receiveInput();
     move();
     updateSights();
+    gun.update();
   }
 
   void updateSights() {
@@ -79,6 +84,14 @@ class Hero extends GameObject {
       targetVelocity.add(0, -speed);
     if (pressed[downKey])
       targetVelocity.add(0, speed);
+    if (pressed[shootKey]) {
+      direction.x = mouseX;
+      direction.y = mouseY;
+      direction = toAbsoluteCoords(direction);
+      direction.sub(position.copy());
+      direction.setMag(1);
+      gun.shoot(position.copy(), direction.copy(), 20, true);
+    }
   }
 
   void move() {
@@ -126,7 +139,6 @@ class Hero extends GameObject {
     // if ANY of the above are true, the line
     // has hit the rectangle
     if (left || right || top || bottom) {
-      // println("hi");
       return true;
     }
     return false;
@@ -145,7 +157,7 @@ class Hero extends GameObject {
       // optionally, draw a circle where the lines meet
       float intersectionX = x1 + (uA * (x2-x1));
       float intersectionY = y1 + (uA * (y2-y1));
-      //println(intersectionX + ", " + intersectionY);
+
 
       PVector intersection = new PVector(intersectionX, intersectionY);
 
@@ -154,7 +166,6 @@ class Hero extends GameObject {
       } else {
         if (dist(position.x, position.y, intersection.x, intersection.y) < dist(position.x, position.y, sightInt.x, sightInt.y)) {
           sightInt = intersection.copy();
-          println(sightInt);
         }
       }
 

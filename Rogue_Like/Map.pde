@@ -45,7 +45,7 @@ class Map {
     for (int i = 0; i < walkIterations; i++) {
       walk(mapWidth, mapHeight);
       if (filled >= filledGoal) {
-        //println("break" + i);
+       
         break;
       }
     }

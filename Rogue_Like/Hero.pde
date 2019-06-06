@@ -1,8 +1,6 @@
 class Hero extends GameObject {
 
   PVector position, direction, velocity, targetVelocity;
-  float speed;
-  float size;
   float smoothing;
   float viewRadius;
 
@@ -11,7 +9,16 @@ class Hero extends GameObject {
   float ix;
   float iy;
 
+  float SPEED, SPRINT;
+  float sprintMeter;
+  float SPRINT_METER;
+  float sprintTimer;
+  float SPRINT_TIMER;
+  boolean trySprint;
+
+
   PVector camOff;
+
 
   Gun gun;
 
@@ -27,13 +34,20 @@ class Hero extends GameObject {
     camOff = new PVector();
 
     speed = 4;
+    SPEED = 4;
+    SPRINT = 8;
+    SPRINT_METER = 100;
+    sprintMeter = SPRINT_METER;
+    SPRINT_TIMER = 120;
+    sprintTimer = SPRINT_TIMER;
+
     size = mapScl * 0.4;
     smoothing = 0.3;
     hp = 100;
 
     viewRadius = 5 * mapScl;
 
-    gun = new Gun(30);
+    gun = new Gun(20);
   }
 
   void display() {
@@ -75,22 +89,40 @@ class Hero extends GameObject {
   }
 
   void receiveInput() {
+    speed = SPEED;
+    trySprint = false;
+    if (pressed[sprintKey] && sprintMeter > 0) {
+      speed = SPRINT;
+      trySprint = true;
+      sprintTimer = 0;
+      sprintMeter--;
+    } else if (!pressed[sprintKey]) {
+      sprintTimer++;
+      if (sprintTimer>=SPRINT_TIMER && sprintMeter < SPRINT_METER)
+        sprintMeter++;
+    }
+
     targetVelocity = new PVector();
     if (pressed[leftKey])
-      targetVelocity.add(-speed, 0);
+      targetVelocity.add(-speed, 0); 
     if (pressed[rightKey])
       targetVelocity.add(speed, 0);
     if (pressed[upKey])
       targetVelocity.add(0, -speed);
     if (pressed[downKey])
       targetVelocity.add(0, speed);
-    if (pressed[shootKey]) {
+    // if (pressed[shootKey]) {
+    if (mousePressed) {
       direction.x = mouseX;
       direction.y = mouseY;
       direction = toAbsoluteCoords(direction);
       direction.sub(position.copy());
       direction.setMag(1);
-      gun.shoot(position.copy(), direction.copy(), 20, true);
+      gun.shoot(position.copy(), direction.copy(), 20, true, 1);
+    }
+
+    if (targetVelocity.equals(new PVector(0, 0)) && trySprint) {
+      sprintMeter++;
     }
   }
 

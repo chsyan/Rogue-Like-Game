@@ -11,9 +11,9 @@ class Gun {
     cd++;
   }
 
-  void shoot(PVector position, PVector direction, float speed, boolean isGood) {
+  void shoot(PVector position, PVector direction, float speed, boolean isGood, float damage) {
     if (cd >= threshold) {
-      gameObjects.add(new Bullet(position.copy(), direction.copy(), speed, isGood));
+      gameObjects.add(new Bullet(position.copy(), direction.copy(), speed, isGood, damage));
       cd = 0;
     }
   }
